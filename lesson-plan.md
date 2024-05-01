@@ -14,21 +14,26 @@ In this context, a *bandit* is a random number generator that doles out *rewards
 
 Your environment consists of an array of bandits, each of which are represented by functions which return a reward and take no arguments. Each bandit has a hidden $\mu$ and $\sigma$ which define the underlying normal distribution of rewards. Throughout your algorithm you maintain a **value** array which assigns a value to each bandit. On each step of your algorithm you will select an **action** accoring to a **policy**. The action is simply an integer $i$ specifying which bandit from the array of bandits will be queried for a reward. The policy uses the value array to determine an action. (Examples of policies include random (pick any action), greedy (pick the highest valued action) and constant (always pick the same action))
 
-    e-greedy search
+### $\epsilon$-greedy search
 
-    given: an array of $n$ bandits as functions bandit(i)
+```python
+given:  bandit[] an array of n bandits as functions bandit(i)
+        epsilon - a constant in [0,1]
+        
+V[i] = 0 for all i in [0,n)
+R[i] = [] for all i in [0,n)
 
-    V[i] = 0 for all i in [0,n)
-    R[i] = [] for all i in [0,n)
+for each t in [0,num_steps)
+  with probability epsilon:
+    select an action i from [0,n) uniformly at random
+  with probability 1-epsilon:
+    select the action i = argmax(V[])
+  r = bandit[i]()
+  append r to R[i] array
+  V[t] = average of values R[i] array
+```
 
-    for each t in [0,num_steps)
-      with probability epsilon:
-        select an action i from [0,n) uniformly at random
-      with probability 1-epsilon:
-        select the action i corresponding to the largest value in V[]
-      r = bandit[i]
-      append r to R[i] array
-      V[t] = average of values R[i] array
+This algorithm applies the greedy policy to $V$ with probability $1-\epsilon$ and the random policy with probability $\epsilon$. Once the action is chosen, the appropriate value entry is updated according to the observed reward. By the law of large numbers one can prove that $V[i]$ will eventually converge to $\mu_i$ for every bandit $i$ if $\epsilon > 0$
 
-This algorithm applies the greedy policy to $V$ with probability $1-\epsilon$ and the random policy with probability $\epsilon$. Once the action is chosen, the value entry is updated according to the observed reward. By the law of large numbers we can prove that $V[i]$ will eventually converge to $\mu_i$ for every bandit $i$ if $\epsilon > 0$
+
 

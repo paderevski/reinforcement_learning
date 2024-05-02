@@ -30,10 +30,14 @@ for each t in [0,num_steps)
     select the action i = argmax(V[])
   r = bandit[i]()
   append r to R[i] array
-  V[t] = average of values R[i] array
+  V[i] = average of values R[i] array
 ```
 
 This algorithm applies the greedy policy to $V$ with probability $1-\epsilon$ and the random policy with probability $\epsilon$. Once the action is chosen, the appropriate value entry is updated according to the observed reward. By the law of large numbers one can prove that $V[i]$ will eventually converge to $\mu_i$ for every bandit $i$ if $\epsilon > 0$
 
+### Assignment
 
+1. Given an environment from your teacher consisting of a function that generates bandits, create a 10-bandit testbed. Implement the $\epsilon$-greedy search for the optimal value function $V$. On input `bandits`, `epsilon` and `trials` your algorithm should output `V` the learned value array and `R` the list of rewards.
+2. Compare the $\epsilon$-greedy algorithm for $\epsilon$ values in $\{0,0.1,0.01,1\}$. (Note that $\epsilon = 0$ is the pure greedy algorithm and $\epsilon=1$ is the uniform algorithm which selects every action with the same probability.) For each $\epsilon$, generate a plot of "average reward" vs. "time" where "average reward at time $t$" is the mean of the returned values from $R[0]$ to $R[t]$.
+3. Sampling error generates noise in your plot for the previous problem. Reduce this by running each $\epsilon$ algorithm for 2000 trials and plotting one averaged return curve for each $\epsilon$. Also plot a horizontal line corresponding to the optimal possible value function, based only on the (assumed known parameters of the) array of bandits()
 
